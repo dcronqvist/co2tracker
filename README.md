@@ -11,3 +11,6 @@ In practice, we want to structure a database that holds information about differ
 ## Course 
 ENM156 - Sustainable development and ethics for computer science
 https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3
+
+## Contributors
+![profile images of contributors](https://contributors-img.web.app/image?repo=dcronqvist/co2tracker)
