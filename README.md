@@ -25,3 +25,10 @@ To run the server you simply run:
 $ python3 server.py
 ```
 This will run the server on localhost:5000, and you can from there access the endpoints.
+
+## Course 
+ENM156 - Sustainable development and ethics for computer science
+https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3
+
+## Contributors
+![profile images of contributors](https://contributors-img.web.app/image?repo=dcronqvist/co2tracker)
