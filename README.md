@@ -8,6 +8,24 @@ We envision a system that calculates the accumulated amount of CO2 emissions by 
 
 In practice, we want to structure a database that holds information about different processes and transports and how much CO2 they emit. Furthermore, we will create an API to communicate with this database - which enables producers and carriers to continuously update the amount of CO2 emissions made per process / mode of transport. In the database, we imagine that a process should depend on other processes, which will create this tree-like structure, from the end product at the top, and the basic raw materials at the bottom.
 
+## Getting set up
+
+Start by cloning the repo down locally
+```shell
+$ git clone https://github.com/dcronqvist/co2tracker
+```
+Then go to the folder and install required libs (flask, pymongo.. etc.)
+```shell
+$ cd co2tracker
+$ python3 -m pip install -r requirements.txt
+```
+Then you should be set up.
+To run the server you simply run:
+```shell
+$ python3 server.py
+```
+This will run the server on localhost:5000, and you can from there access the endpoints.
+
 ## Course 
 ENM156 - Sustainable development and ethics for computer science
 https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3
