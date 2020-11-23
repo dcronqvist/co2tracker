@@ -1,7 +1,7 @@
 import flask
 from flask import request, jsonify, make_response
 from flaskr import app
-from flaskr.connect import collection
+from flaskr.db import collection
 import datetime
 
 sampleobject = { # sample object with all the parameters
