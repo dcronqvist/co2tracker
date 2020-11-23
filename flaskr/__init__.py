@@ -2,7 +2,10 @@ from flask import Flask, make_response, jsonify
 
 app = Flask(__name__)
 
-# Here we will import endpoints somehow
+# Here we will import endpoints
+import flaskr.api
+
+
 # Below is a standard testing one
 # This line specifies at which url you reach this defined method. Also which HTTP methods that can be used with it.
 @app.route('/', methods=["GET"])
