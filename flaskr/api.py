@@ -27,13 +27,13 @@ def add():
         if key in query:
             continue
         else:
-            return make_response(jsonify(query), 404)
+            return make_response(jsonify(query), 404) # return error if we find a field which doesn't match
     
     for key in sampleobject['impact']: # check if query.implact has all the mandatory fields
         if key in query['impact']:
             continue
         else:
-            return make_response(jsonify(query), 404)
+            return make_response(jsonify(query), 404) # return error if we find a field which doesn't match
 
     # TBA - we need to add product to database here
     return make_response(jsonify(query), 200)
