@@ -20,12 +20,13 @@ $ cd co2tracker
 $ python3 -m pip install -r requirements.txt
 ```
 Then you should be set up.
+
+All you have to do is make a copy of the config_template.json file and name it config.json. Remember to paste the connection string from MongoDB in the config.json file. You can of course change the port and host on which it is run if you want to.
+
 To run the server you simply run:
 ```shell
 $ python3 server.py
 ```
-This will run the server on localhost:5000, and you can from there access the endpoints.
-
 ## Course 
 ENM156 - Sustainable development and ethics for computer science
 https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3
