@@ -28,5 +28,6 @@ jobs:
         with:
           command: cd co2tracker/ && bash update-api.sh
           host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
           username: co2tracker
           password : ${{ secrets.PASSWORD }}
