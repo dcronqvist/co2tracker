@@ -1,6 +1,8 @@
 # Global Supply Chain CO2 Tracker 🌱
 A four week project at Chalmers University in collaboration with Ericsson in the Course Sustainable development and ethics for computer science.
 
+![deploy to server badge](https://github.com/dcronqvist/co2tracker/workflows/Deploy%20to%20server/badge.svg)
+
 ## Vision 💡
 The idea is to design a system that enables sustainable purchasing decisions by being able to track CO2 emissions throughout the supply chain. This will make it easier for consumers and producers to make more informed decisions regarding their purchases and visualize their impact in a growing circular economy.
 
