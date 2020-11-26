@@ -36,7 +36,7 @@ jobs:
         run: sleep 5
         
       - name: check if server is running
-        run: printf "::set-output name=RESP_CODE::%s\n" "$(curl -I -s https://co2.dcronqvist.se | grep -o 200 -c)"
+        run: echo "::set-output name=RESP_CODE::$(curl -I -s https://co2.dcronqvist.se | grep -o 200 -c)"
         id: check-run
       
       - name: fail if no 200 status
