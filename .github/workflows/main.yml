@@ -40,5 +40,5 @@ jobs:
         id: check-run
       
       - name: fail if no 200 status
-        if: ${{ steps.check-run.outputs.RESP_CODE == 1 }}
+        if: steps.check-run.outputs.RESP_CODE == 1
         run: echo "All went well, server is up and running."
