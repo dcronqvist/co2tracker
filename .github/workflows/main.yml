@@ -31,3 +31,14 @@ jobs:
           port: ${{ secrets.PORT }}
           username: co2tracker
           password : ${{ secrets.PASSWORD }}
+
+      - name: sleep a little
+        run: sleep 5
+        
+      - name: check if server is running
+        run: printf "::set-output name=RESP_CODE::%s\n" "$(curl -I -s https://co2.dcronqvist.se | grep -o 200 -c)"
+        id: check-run
+      
+      - name: fail if no 200 status
+        if: ${{ steps.check-run.RESP_CODE == 1 }}
+        run: echo "All went well, server is up and running."
