@@ -3,6 +3,7 @@ from flask import request, jsonify, make_response
 from flaskr import app
 from flaskr.db import collection
 import datetime
+import json
 
 sampleobject = { # sample object with all the parameters
     'type': "product",
@@ -43,18 +44,25 @@ def add():
 # possible parameters supplied to get-endpoint, ONLY ONE CAN BE PROVIDED AT A TIME:
 # {
 #   'tags': [ .. , .. , .. ]
-#   '_id': ''
+#   '_id': [ .. , .. , .. ]
 # }
 @app.route('/get', methods=["POST"])
 def get():
     query = request.get_json() # get query in json-format
 
     if 'tags' in query: 
-        found = collection.find({'tags': { '$all': query['tags']}}) # find products with all the specified tags
-        return make_response(jsonify(list(found)), 200)
+        collection.create_index('tags') # create tag-index
+        found = collection.find({'tags': { '$all': query['tags']}}) # find products which have ALL the specified tags
+        l = list(found)
+        if len(l) == 0:
+            return make_response(jsonify(None), 400)
+        return make_response(jsonify(l), 200)
     if '_id' in query:
-        found = collection.find_one({'_id' : query['_id']})
-        return make_response(jsonify(found), 200)
+        found = collection.find({'_id': {'$in': query['_id']}}) # find products with any of the id's provided
+        l = (list(found))
+        if len(l) == 0: # if none found, return error
+            return make_response(jsonify(None), 400)
+        return make_response(jsonify(l), 200)
     return make_response(jsonify(None), 400)
 
 
