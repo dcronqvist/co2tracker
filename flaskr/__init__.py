@@ -5,7 +5,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Here we will import endpoints
-import flaskr.api
+import flaskr.products
 
 # Below is a standard testing one
 # This line specifies at which url you reach this defined method. Also which HTTP methods that can be used with it.
