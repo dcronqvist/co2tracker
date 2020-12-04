@@ -1,7 +1,7 @@
 import flask
 from flask import request, jsonify, make_response
 from flaskr import app, check_payload
-from flaskr.db import collection
+from flaskr.db import coll_products
 import datetime
 import json
 
@@ -62,8 +62,8 @@ def products_search_by_tag():
     succ, msg = check_payload(product_search_sample_tags, query)
 
     if succ:
-        collection.create_index('tags') # create tag-index
-        found = collection.find({'tags': { '$all': query['tags']}}) # find products which have ALL the specified tags
+        coll_products.create_index('tags') # create tag-index
+        found = coll_products.find({'tags': { '$all': query['tags']}}) # find products which have ALL the specified tags
         l = list(found)
         if len(l) == 0:
             return make_response(jsonify("No products found."), 404)
@@ -86,7 +86,7 @@ def products_search_by_id():
     succ, msg = check_payload(product_search_sample_id, query)
 
     if succ:
-        found = collection.find({'_id': {'$in': query['_id']}}) # find products with any of the id's provided
+        found = coll_products.find({'_id': {'$in': query['_id']}}) # find products with any of the id's provided
         l = (list(found))
         if len(l) == 0: # if none found, return error
             return make_response(jsonify("No products found."), 404)
