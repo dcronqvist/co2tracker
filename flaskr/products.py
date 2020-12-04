@@ -27,12 +27,12 @@ product_create_sample = {
             "energy_sources": ["list"] # e.g. ["Solar", "Nuclear", "Wind"]
         },
         "date": ["str"], # e.g. "2020-11-30-22:50:51"
-        "subproducts": ["list"],# should be a list of objects with "product" and "transport" keys
+        "sub_products": ["list"],# should be a list of objects with "product" and "transport" keys
     }
 }
 """
 CURL-FRIENDLY TEST:
-$ curl -X POST -d '{ "_id": "IKEA-BILLY", "weight": 25, "type": "product", "tags": ["Furniture"], "type_description": "Assembly", "prod_name": "IKEA Billy Shelf", "benchmark": { "self_impact": { "co2": 5.1, "measurement_error": 0.05, "energy_sources": ["Solar", "Nuclear", "Wind"] }, "date": "2020-12-01-00:05:32", "subproducts": [] } }' -H "Content-Type: application/json" 127.0.0.1:5000/products/create
+$ curl -X POST -d '{ "_id": "IKEA-BILLY", "weight": 25, "type": "product", "tags": ["Furniture"], "type_description": "Assembly", "prod_name": "IKEA Billy Shelf", "benchmark": { "self_impact": { "co2": 5.1, "measurement_error": 0.05, "energy_sources": ["Solar", "Nuclear", "Wind"] }, "date": "2020-12-01-00:05:32", "sub_products": [] } }' -H "Content-Type: application/json" 127.0.0.1:5000/products/create
 """
 @app.route('/products/create', methods=["POST"]) 
 def products_create():
