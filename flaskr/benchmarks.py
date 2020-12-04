@@ -21,8 +21,6 @@ def benchmarks_all():
     if check:
         found = coll_benchmarks.find({'product': query["product"]}) # find all benchmarks for this product
         l = list(found)
-        print(l)
-
         if len(l) > 0: # If there are more than 0 found benchmarks, return them
             return make_response(jsonify(l), 200)
         else: # if there were no found benchmarks for that product, then return "No benchmarks found"
