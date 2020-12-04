@@ -4,9 +4,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Here we will import endpoints
-import flaskr.api
-
 # Below is a standard testing one
 # This line specifies at which url you reach this defined method. Also which HTTP methods that can be used with it.
 @app.route('/', methods=["GET"])
@@ -33,3 +30,37 @@ def after(response):
 	}
     # creates the response and returns to the caller.
 	return make_response(jsonify(ret), ret["status_code"])
+
+def check_payload(sample, payload):
+    """
+    Loop through all keys in sample, make sure they all exist in the payload.
+    Type check all keys to make sure they match. Lists are harder, since 
+    there isn't an implementation to check if the elements are of the correct type.
+    TODO: ADD TYPE CHECKING FOR ELEMENTS IN LISTS
+    """
+    for key in sample:
+        if payload and hasattr(payload, "__iter__"):
+            if key in payload:
+                if type(sample[key]) == list:
+                    # Here we type check for all possible allowed types in the list in the sample object.
+                    ok_types = [eval(t) for t in sample[key]]
+                    if not (type(payload[key]) in ok_types):
+                        return False, f"ERROR: On key '{key}', expected type(s) '{ok_types}', got '{type(payload[key])}'."
+                elif type(sample[key]) == str:
+                    # If it is a string in the sample, then that means that the key must match EXACT
+                    if not (sample[key] == payload[key]):
+                        return False, f"ERROR: On key '{key}', expected '{sample[key]}', got '{payload[key]}'."
+                else:
+                    # The sample is an object, recursively check downwards
+                    succ, msg = check_payload(sample[key], payload[key])
+                    if not succ:
+                        return False, msg
+            else:
+                return False, f"ERROR: Missing key '{key}'"
+        else:
+            return False, f"ERROR: Payload is null or in wrong format."
+    return True, "Payload matches sample."
+
+# Here we will import endpoints
+import flaskr.products
+import flaskr.benchmarks
