@@ -44,9 +44,9 @@ def benchmarks_latest():
 
     if check:
         found = coll_benchmarks.find_one({'product': query["product"], 'latest_benchmark': True}) # find all benchmarks for this product
-        if found: # If there are more than 0 found benchmarks, return them
+        if found: # If there was a benchmark found.
             return make_response(jsonify(found), 200)
-        else: # if there were no found benchmarks for that product, then return "No benchmarks found"
+        else: # if there was no found benchmark for that product, then return "No benchmark found"
             return make_response(jsonify("No benchmark found."), 404)
     else:
         # If the payload doesn't pass payload check, return 400
