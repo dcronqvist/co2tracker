@@ -29,7 +29,7 @@ def benchmarks_all():
         # If the payload doesn't pass payload check, return 400
         return make_response(jsonify(msg), 400)
 
-# SEARCH ALL BENCHMARKS FOR PRODUCT
+# SEARCH LATEST BENCHMARK FOR PRODUCT
 b_latest_sample = {
     "product": ["str"]
 }
@@ -48,6 +48,31 @@ def benchmarks_latest():
             return make_response(jsonify(found), 200)
         else: # if there was no found benchmark for that product, then return "No benchmark found"
             return make_response(jsonify("No benchmark found."), 404)
+    else:
+        # If the payload doesn't pass payload check, return 400
+        return make_response(jsonify(msg), 400)
+
+# SEARCH BENCHMARKS FOR PRODUCT BY DATE
+b_date_sample = {
+    "product": ["str"],
+    "date": ["str"] # format 2020-12-06
+}
+"""
+CURL-FRIENDLY TEST:
+$ curl -d '{"product": "accumulator", "date": "2020-12-04"}' -H "Content-Type: application/json" -X POST http://localhost:5000/benchmarks/get/date
+"""
+@app.route("/benchmarks/get/date", methods=["POST"])
+def benchmarks_date():
+    query = request.get_json() # Get query as json
+    check, msg = check_payload(b_date_sample, query) # Check payload
+
+    if check:
+        found = coll_benchmarks.find({'product': query["product"], 'date': query["date"]}) # find all benchmarks for this product
+        l = list(found)
+        if len(l) > 0: # If there was at least one benchmark found.
+            return make_response(jsonify(l), 200)
+        else: # if there were no found benchmarks for that product on that date, then return "No benchmarks found."
+            return make_response(jsonify("No benchmarks found."), 404)
     else:
         # If the payload doesn't pass payload check, return 400
         return make_response(jsonify(msg), 400)
