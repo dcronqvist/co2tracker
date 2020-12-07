@@ -4,6 +4,8 @@ from flaskr import app, check_payload
 from flaskr.db import coll_products
 import datetime
 import json
+from flaskr.bench_util import get_chain_impact, insert_benchmark
+from datetime import datetime as dt
 
 # CREATE PRODUCT
 """
@@ -19,7 +21,8 @@ product_create_sample = {
     'tags': ["list"], # e.g. ["furniture", "shelf", "wood"]
     'type_description': ["str"], # "Assembly"
     'prod_name': ["str"], # e.g. "Billy Shelf"
-    'weight': ["float", "int"], # e.g. 12.81
+    'kg_per_unit': ["float", "int"], # e.g. 12.81
+    'unit': ["str"],
     'benchmark': {
         "self_impact": {
             "co2": ["float", "int"], # e.g. 292.62
@@ -39,9 +42,37 @@ def products_create():
     query = request.get_json()
     check, msg = check_payload(product_create_sample, query)
     if check:
+        prod = {
+            "_id": query["_id"],
+            "type": "product",
+            "tags": [tag.lower() for tag in query["tags"]],
+            "type_description": query["type_description"].lower(),
+            "prod_name": query["prod_name"]
+        }
         # All good, create product.
         # TODO: ADD PRODUCT TO DATABASE
-        return make_response(jsonify(query), 200)
+        coll_products.insert_one(prod)
+
+        benchmark = {
+            "date": dt.today().strftime("%Y-%m-%d"),
+            "product": query["_id"],
+            "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
+            "kg_per_unit": query["kg_per_unit"],
+            "unit": query["unit"],
+            "self_impact": {
+                "co2": query["benchmark"]["self_impact"]["co2"],
+                "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
+                "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
+            },
+            "chain_impact": {
+                "co2": 0,
+                "measurement_error": 0
+            },
+            "sub_products": query["benchmark"]["sub_products"],
+            "latest_benchmark": True
+        }
+        insert_benchmark(benchmark)
+        return make_response(jsonify(prod), 200)
         pass
     else:
         # Something went wrong when checking payload. Return error.
