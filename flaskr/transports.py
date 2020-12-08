@@ -50,4 +50,7 @@ def transports_create():
         else:
             return make_response(jsonify('ERROR: ID ' + str(query['_id']) + ' already exists'), 400)
     else:
+        # Something went wrong when checking payload. Return error. 
         return make_response(jsonify(msg), 400)
+
+
