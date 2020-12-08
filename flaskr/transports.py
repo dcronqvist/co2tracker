@@ -54,3 +54,29 @@ def transports_create():
         return make_response(jsonify(msg), 400)
 
 
+# SEARCH TRANSPORTS BY ID'S
+transport_search_sample_id = {
+    "_id": ["list"],
+}
+
+"""
+CURL-FRIENDLY TEST:
+$ curl -X POST -d '{ "_id": [1,2] }' -H "Content-Type: application/json" 127.0.0.1:5000/transports/search/id
+"""
+
+@app.route('/transports/search/id', methods=['POST'])
+def transports_get_id():
+    query = request.get_json()
+    succ, msg = check_payload(transport_search_sample_id, query)
+
+    if succ:
+        found = coll_transports.find({'_id': {'$in': query['_id']}}) # find products with any of the id's provided
+        l = (list(found))
+        if len(l) == 0: # if none found, return error
+            return make_response(jsonify("No transports found."), 404)
+        return make_response(jsonify(l), 200)
+
+    return make_response(jsonify(msg), 400)
+
+
+
