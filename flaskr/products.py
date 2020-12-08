@@ -35,7 +35,7 @@ product_create_sample = {
 }
 """
 CURL-FRIENDLY TEST:
-$ curl -X POST -d '{ "_id": "IKEA-BILLY", "weight": 25, "type": "product", "tags": ["Furniture"], "type_description": "Assembly", "prod_name": "IKEA Billy Shelf", "benchmark": { "self_impact": { "co2": 5.1, "measurement_error": 0.05, "energy_sources": ["Solar", "Nuclear", "Wind"] }, "date": "2020-12-01-00:05:32", "sub_products": [] } }' -H "Content-Type: application/json" 127.0.0.1:5000/products/create
+$ curl -X POST -d '{ "_id": "IKEA-BILLY", "kg_per_unit": 25, "unit": "piece", "type": "product", "tags": ["Furniture"], "type_description": "Assembly", "prod_name": "IKEA Billy Shelf", "benchmark": { "self_impact": { "co2": 5.1, "measurement_error": 0.05, "energy_sources": ["Solar", "Nuclear", "Wind"] }, "date": "2020-12-01-00:05:32", "sub_products": [] } }' -H "Content-Type: application/json" 127.0.0.1:5000/products/create
 """
 @app.route('/products/create', methods=["POST"]) 
 def products_create():
@@ -43,37 +43,43 @@ def products_create():
     check, msg = check_payload(product_create_sample, query)
     if check:
         prod = {
-            "_id": query["_id"],
+            "_id": query["_id"].upper(),
             "type": "product",
             "tags": [tag.lower() for tag in query["tags"]],
             "type_description": query["type_description"].lower(),
             "prod_name": query["prod_name"]
         }
         # All good, create product.
-        # TODO: ADD PRODUCT TO DATABASE
-        coll_products.insert_one(prod)
 
-        benchmark = {
-            "date": dt.today().strftime("%Y-%m-%d"),
-            "product": query["_id"],
-            "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
-            "kg_per_unit": query["kg_per_unit"],
-            "unit": query["unit"],
-            "self_impact": {
-                "co2": query["benchmark"]["self_impact"]["co2"],
-                "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
-                "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
-            },
-            "chain_impact": {
-                "co2": 0,
-                "measurement_error": 0
-            },
-            "sub_products": query["benchmark"]["sub_products"],
-            "latest_benchmark": True
-        }
-        insert_benchmark(benchmark)
-        return make_response(jsonify(prod), 200)
-        pass
+        find = coll_products.find_one({'_id': query['_id'].upper()})
+        # If find returns the product, we do none of the below (product already exists)
+        
+        if find == None:
+            coll_products.insert_one(prod)
+
+            benchmark = {
+                "date": dt.today().strftime("%Y-%m-%d"),
+                "product": query["_id"],
+                "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
+                "kg_per_unit": query["kg_per_unit"],
+                "unit": query["unit"],
+                "self_impact": {
+                    "co2": query["benchmark"]["self_impact"]["co2"],
+                    "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
+                    "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
+                },
+                "chain_impact": {
+                    "co2": 0,
+                    "measurement_error": 0
+                },
+                "sub_products": query["benchmark"]["sub_products"],
+                "latest_benchmark": True
+            }
+            insert_benchmark(benchmark)
+            return make_response(jsonify(prod), 200)
+            pass
+        else:
+            return make_response(jsonify('ERROR: ID ' + str(query['_id']).upper() + ' already exists'), 400)
     else:
         # Something went wrong when checking payload. Return error.
         return make_response(jsonify(msg), 400)
