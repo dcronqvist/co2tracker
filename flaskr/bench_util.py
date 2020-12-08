@@ -61,7 +61,7 @@ def get_chain_impact(_id):
     return 0
 
 # Inserting a benchmark to the database, does not check if it already exists, so make sure to do that before.
-def insert_benchmark(benchmark)
+def insert_benchmark(benchmark):
     # Insert benchmark to database
     coll_benchmarks.insert_one(benchmark)
 
