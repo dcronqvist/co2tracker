@@ -50,9 +50,9 @@ def products_create():
             "prod_name": query["prod_name"]
         }
         # All good, create product.
-        # TODO: CHECK IF PRODUCT EXIST, IF IT DOES - DO NOTHING OF THE BELOW
 
         find = coll_products.find_one({'_id': query['_id']})
+        # If find returns the product, we do none of the below (product already exists)
         
         if find == 'None':
             coll_products.insert_one(prod)
