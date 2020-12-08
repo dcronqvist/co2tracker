@@ -22,7 +22,7 @@ transport_create_sample = {
         'co2_per_kg_km': ['int', 'float'],
         'measurement_error': ['int', 'float'],
         'distance_travelled': ['int', 'float'],
-        'energy_sources': ['list'],
+        'energy_sources': ['list:str'],
     },
     'start_lat': ["float", "int"],
     'start_lon': ["float", "int"],
@@ -56,7 +56,7 @@ def transports_create():
 
 # SEARCH TRANSPORTS BY ID'S
 transport_search_sample_id = {
-    "_id": ["list"],
+    "_id": ["list:int"],
 }
 
 """

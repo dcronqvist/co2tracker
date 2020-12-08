@@ -18,7 +18,7 @@ Following sample object conventions.
 product_create_sample = {
     '_id': ["str"], # e.g. "IKEA-BILLY-5"
     'type': "product", # will always be product
-    'tags': ["list"], # e.g. ["furniture", "shelf", "wood"]
+    'tags': ["list:str"], # e.g. ["furniture", "shelf", "wood"]
     'type_description': ["str"], # "Assembly"
     'prod_name': ["str"], # e.g. "Billy Shelf"
     'kg_per_unit': ["float", "int"], # e.g. 12.81
@@ -27,10 +27,16 @@ product_create_sample = {
         "self_impact": {
             "co2": ["float", "int"], # e.g. 292.62
             "measurement_error": ["float"], # e.g. 0.05 -> 5% error margin
-            "energy_sources": ["list"] # e.g. ["Solar", "Nuclear", "Wind"]
+            "energy_sources": ["list:str"] # e.g. ["Solar", "Nuclear", "Wind"]
         },
         "date": ["str"], # e.g. "2020-11-30-22:50:51"
-        "sub_products": ["list"],# should be a list of objects with "product" and "transport" keys
+        "sub_products": [
+            {
+                "product": ["str"],
+                "unit_amount": ["float", "int"],
+                "transport": ["int"]
+            }
+        ]
     }
 }
 """
@@ -87,7 +93,7 @@ def products_create():
 
 # SEARCH PRODUCTS BY TAGS
 product_search_sample_tags = {
-    "tags": ["list"],
+    "tags": ["list:str"],
 }
 """
 CURL-FRIENDLY TEST:
@@ -111,7 +117,7 @@ def products_search_by_tag():
 
 # SEARCH PRODUCTS BY ID'S
 product_search_sample_id = {
-    "_id": ["list"],
+    "_id": ["list:str"],
 }
 """
 CURL-FRIENDLY TEST:
