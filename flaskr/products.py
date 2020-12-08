@@ -43,7 +43,7 @@ def products_create():
     check, msg = check_payload(product_create_sample, query)
     if check:
         prod = {
-            "_id": query["_id"].toupper(),
+            "_id": query["_id"].upper(),
             "type": "product",
             "tags": [tag.lower() for tag in query["tags"]],
             "type_description": query["type_description"].lower(),
@@ -51,10 +51,10 @@ def products_create():
         }
         # All good, create product.
 
-        find = coll_products.find_one({'_id': query['_id']})
+        find = coll_products.find_one({'_id': query['_id'].upper()})
         # If find returns the product, we do none of the below (product already exists)
         
-        if find == 'None':
+        if find == None:
             coll_products.insert_one(prod)
 
             benchmark = {
@@ -79,7 +79,7 @@ def products_create():
             return make_response(jsonify(prod), 200)
             pass
         else:
-            return make_response(jsonify('ERROR: ID ' + str(query['_id']) + ' already exists'), 400)
+            return make_response(jsonify('ERROR: ID ' + str(query['_id']).upper() + ' already exists'), 400)
     else:
         # Something went wrong when checking payload. Return error.
         return make_response(jsonify(msg), 400)
