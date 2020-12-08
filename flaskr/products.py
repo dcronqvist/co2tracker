@@ -59,8 +59,8 @@ def products_create():
 
             benchmark = {
                 "date": dt.today().strftime("%Y-%m-%d"),
-                "product": query["_id"],
-                "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
+                "product": prod["_id"],
+                "_id": prod["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
                 "kg_per_unit": query["kg_per_unit"],
                 "unit": query["unit"],
                 "self_impact": {
