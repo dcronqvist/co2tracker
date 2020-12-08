@@ -70,7 +70,7 @@ def transports_get_id():
     succ, msg = check_payload(transport_search_sample_id, query)
 
     if succ:
-        found = coll_transports.find({'_id': {'$in': query['_id']}}) # find products with any of the id's provided
+        found = coll_transports.find({'_id': {'$in': query['_id']}}) # find transports with any of the id's provided
         l = (list(found))
         if len(l) == 0: # if none found, return error
             return make_response(jsonify("No transports found."), 404)
