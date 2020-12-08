@@ -43,7 +43,7 @@ def products_create():
     check, msg = check_payload(product_create_sample, query)
     if check:
         prod = {
-            "_id": query["_id"],
+            "_id": query["_id"].toupper(),
             "type": "product",
             "tags": [tag.lower() for tag in query["tags"]],
             "type_description": query["type_description"].lower(),
@@ -52,29 +52,34 @@ def products_create():
         # All good, create product.
         # TODO: CHECK IF PRODUCT EXIST, IF IT DOES - DO NOTHING OF THE BELOW
 
-        coll_products.insert_one(prod)
+        find = coll_products.find_one({'_id': query['_id']})
+        
+        if find == 'None':
+            coll_products.insert_one(prod)
 
-        benchmark = {
-            "date": dt.today().strftime("%Y-%m-%d"),
-            "product": query["_id"],
-            "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
-            "kg_per_unit": query["kg_per_unit"],
-            "unit": query["unit"],
-            "self_impact": {
-                "co2": query["benchmark"]["self_impact"]["co2"],
-                "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
-                "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
-            },
-            "chain_impact": {
-                "co2": 0,
-                "measurement_error": 0
-            },
-            "sub_products": query["benchmark"]["sub_products"],
-            "latest_benchmark": True
-        }
-        insert_benchmark(benchmark)
-        return make_response(jsonify(prod), 200)
-        pass
+            benchmark = {
+                "date": dt.today().strftime("%Y-%m-%d"),
+                "product": query["_id"],
+                "_id": query["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
+                "kg_per_unit": query["kg_per_unit"],
+                "unit": query["unit"],
+                "self_impact": {
+                    "co2": query["benchmark"]["self_impact"]["co2"],
+                    "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
+                    "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
+                },
+                "chain_impact": {
+                    "co2": 0,
+                    "measurement_error": 0
+                },
+                "sub_products": query["benchmark"]["sub_products"],
+                "latest_benchmark": True
+            }
+            insert_benchmark(benchmark)
+            return make_response(jsonify(prod), 200)
+            pass
+        else:
+            return make_response(jsonify('ERROR: ID ' + str(query['_id']) + ' already exists'), 400)
     else:
         # Something went wrong when checking payload. Return error.
         return make_response(jsonify(msg), 400)
