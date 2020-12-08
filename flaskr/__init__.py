@@ -64,3 +64,4 @@ def check_payload(sample, payload):
 # Here we will import endpoints
 import flaskr.products
 import flaskr.benchmarks
+import flaskr.transports
