@@ -4,8 +4,6 @@
 name: Build and Test Python Application
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
 
 jobs:
