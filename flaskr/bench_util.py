@@ -139,7 +139,6 @@ def add_benchmark(benchmark):
 
     # Loop through all parents
     for parent in parents:
-        
         # Update this parent to no longer be the latest version of itself
         coll_benchmarks.update_one({"_id": parent["_id"]}, { "$set": { "latest_benchmark": False } })
 
