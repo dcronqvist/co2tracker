@@ -4,7 +4,7 @@ from flaskr import app, check_payload
 from flaskr.db import coll_products
 import datetime
 import json
-from flaskr.bench_util import get_chain_impact, insert_benchmark
+from flaskr.api_util import get_chain_impact, insert_benchmark, get_all_tags
 from datetime import datetime as dt
 
 # CREATE PRODUCT
@@ -134,3 +134,13 @@ def products_search_by_id():
         return make_response(jsonify(li), 200)
 
     return make_response(jsonify(msg), 400)
+
+
+# GET ALL PRODUCT TAGS AND THEIR FREQUENCY OF USE
+"""
+CURL-FRIENDLY TEST:
+$ curl 127.0.0.1:5000/products/tags/all
+"""
+@app.route('/products/tags/all', methods=["GET"])
+def products_tags_all():
+    return make_response(jsonify(get_all_tags()), 200)

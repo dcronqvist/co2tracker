@@ -2,7 +2,7 @@ import flask
 from flask import request, jsonify, make_response
 from flaskr import app, check_payload
 from flaskr.db import coll_benchmarks, coll_products
-from flaskr.bench_util import create_chain_impact, add_benchmark
+from flaskr.api_util import create_chain_impact, add_benchmark
 import datetime
 import json
 from datetime import datetime as dt
