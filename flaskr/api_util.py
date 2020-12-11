@@ -169,3 +169,9 @@ def get_all_tags():
             else:
                 tags[tag] += 1
     return tags
+
+def get_all_product_ids():
+    found = coll_products.find({}, {"_id": 1})
+    found = list(found)
+
+    return [f["_id"] for f in found]
