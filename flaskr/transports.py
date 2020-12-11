@@ -4,7 +4,7 @@ from flaskr import app, check_payload
 from flaskr.db import coll_products, coll_transports
 import datetime
 import json
-from flaskr.bench_util import get_chain_impact, insert_benchmark
+from flaskr.api_util import get_chain_impact, insert_benchmark
 from datetime import datetime as dt
 
 """

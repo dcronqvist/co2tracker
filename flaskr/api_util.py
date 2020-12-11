@@ -1,7 +1,7 @@
 import flask
 from flask import request, jsonify, make_response
 from flaskr import app, check_payload
-from flaskr.db import coll_benchmarks, coll_transports
+from flaskr.db import coll_benchmarks, coll_transports, coll_products
 import datetime
 import json
 from datetime import datetime as dt
@@ -157,3 +157,21 @@ def add_benchmark(benchmark):
         # Then recursively add, so we make sure that we update this parent's parents.
         add_benchmark(p_benchmark)
     return benchmark
+
+def get_all_tags():
+    found = coll_products.find({}, {"_id": 0, "tags": 1})
+    tags = dict()
+
+    for t in found:
+        for tag in t["tags"]:
+            if tag not in tags:
+                tags[tag] = 1
+            else:
+                tags[tag] += 1
+    return tags
+
+def get_all_product_ids():
+    found = coll_products.find({}, {"_id": 1})
+    found = list(found)
+
+    return [f["_id"] for f in found]
