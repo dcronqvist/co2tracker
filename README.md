@@ -3,6 +3,10 @@ A four week project at Chalmers University in collaboration with Ericsson in the
 
 ![deploy to server badge](https://github.com/dcronqvist/co2tracker/workflows/Deploy%20to%20server/badge.svg)
 
+[Front end Demo is right here](https://co2demo.dcronqvist.se/)
+
+[API Endpoints](https://co2.dcronqvist.se/)
+
 ## Vision 💡
 The idea is to design a system that enables sustainable purchasing decisions by being able to track CO2 emissions throughout the supply chain. This will make it easier for consumers and producers to make more informed decisions regarding their purchases and visualize their impact in a growing circular economy.
 
