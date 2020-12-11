@@ -154,3 +154,50 @@ $ curl 127.0.0.1:5000/products/id/all
 @app.route('/products/id/all', methods=["GET"])
 def products_id_all():
     return make_response(jsonify(get_all_product_ids()), 200)
+
+
+# SEARCH PRODUCTS BY REGEX ON ID's
+product_search_sample_id_regex = {
+    "search": ["str"],
+}
+"""
+CURL-FRIENDLY TEST:
+$ curl -X POST -d '{ "search": "accumu" }' -H "Content-Type: application/json" 127.0.0.1:5000/products/search/id/regex
+"""
+@app.route('/products/search/id/regex', methods=["POST"])
+def products_search_by_id_regex():
+    query = request.get_json()  # get query in json-format
+    succ, msg = check_payload(product_search_sample_id_regex, query)
+
+    if succ:
+        found = coll_products.find({ "_id": { "$regex": query["search"], "$options": "i" } }, {"_id": 1})  # find products that matches on regex search
+        li = [prod["_id"] for prod in list(found)]
+        if len(li) == 0:  # if none found, return empty array
+            return make_response(jsonify([]), 200)
+        return make_response(jsonify(li), 200)
+
+    return make_response(jsonify(msg), 400)
+
+
+# SEARCH PRODUCTS BY REGEX ON PROD_NAMES's
+product_search_sample_id_regex = {
+    "search": ["str"],
+}
+"""
+CURL-FRIENDLY TEST:
+$ curl -X POST -d '{ "search": "accumu" }' -H "Content-Type: application/json" 127.0.0.1:5000/products/search/name/regex
+"""
+@app.route('/products/search/name/regex', methods=["POST"])
+def products_search_by_name_regex():
+    query = request.get_json()  # get query in json-format
+    succ, msg = check_payload(product_search_sample_id_regex, query)
+
+    if succ:
+        found = coll_products.find({ "prod_name": { "$regex": query["search"], "$options": "i" } }, {"_id": 1, "prod_name": 1})  # find products that matches on regex search
+        d = dict()
+        for prod in list(found):
+            d[prod["_id"]] = prod["prod_name"]
+        if len(d) == 0:  # if none found, return empty array
+            return make_response(jsonify({}), 200)
+        return make_response(jsonify(d), 200)
+    return make_response(jsonify(msg), 400)
