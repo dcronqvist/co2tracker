@@ -21,7 +21,7 @@ def benchmarks_all():
     check, msg = check_payload(b_all_sample, query)  # Check payload
 
     if check:
-        found = coll_benchmarks.find({'product': query["product"]})  # find all benchmarks for this product
+        found = coll_benchmarks.find({'product': query["product"].lower() })  # find all benchmarks for this product
         li = list(found)
         if len(li) > 0:  # If there are more than 0 found benchmarks, return them
             return make_response(jsonify(li), 200)
@@ -46,7 +46,7 @@ def benchmarks_latest():
     check, msg = check_payload(b_latest_sample, query)  # Check payload
 
     if check:
-        found = coll_benchmarks.find_one({'product': query["product"], 'latest_benchmark': True})  # find latest benchmark
+        found = coll_benchmarks.find_one({'product': query["product"].lower(), 'latest_benchmark': True})  # find latest benchmark
         if found:  # If there was a benchmark found.
             return make_response(jsonify(found), 200)
         else:  # if there was no found benchmark for that product, then return "No benchmark found"
@@ -71,7 +71,7 @@ def benchmarks_date():
     check, msg = check_payload(b_date_sample, query)  # Check payload
 
     if check:
-        found = coll_benchmarks.find({'product': query["product"], 'date': query["date"]})  # find dated benchmarks
+        found = coll_benchmarks.find({'product': query["product"].lower(), 'date': query["date"]})  # find dated benchmarks
         li = list(found)
         if len(li) > 0:  # If there was at least one benchmark found.
             return make_response(jsonify(li), 200)
@@ -98,14 +98,14 @@ def benchmarks_parents():
 
     if check:
         if query["search"] == "latest":
-            found = coll_benchmarks.find({ "sub_products.product": query["product"], "latest_benchmark": True })
+            found = coll_benchmarks.find({ "sub_products.product": query["product"].lower(), "latest_benchmark": True })
             li = list(found)
             if len(li) > 0:  # If there was at least one benchmark found.
                 return make_response(jsonify(li), 200)
             else:  # if there were no found benchmarks for that product on that date, then return "No benchmarks found."
                 return make_response(jsonify("No benchmarks found."), 404)
         elif query["search"] == "all":
-            found = coll_benchmarks.find({ "sub_products.product": query["product"] })  # find all parent benchmarks
+            found = coll_benchmarks.find({ "sub_products.product": query["product"].lower() })  # find all parent benchmarks
             li = list(found)
             if len(li) > 0:  # If there was at least one benchmark found.
                 return make_response(jsonify(li), 200)
@@ -148,11 +148,11 @@ def benchmarks_create():
 
     if check:
         # Make sure that the product you're making a new benchmark for actually exists.
-        if not coll_products.find_one({"_id": query["product"]}):
-            return make_response(jsonify(f"ERROR: No product with ID '{query['product']}' exists."), 404)
+        if not coll_products.find_one({"_id": query["product"].lower()}):
+            return make_response(jsonify(f"ERROR: No product with ID '{query['product'].lower()}' exists."), 404)
 
         benchmark = {
-            "product": query["product"],
+            "product": query["product"].lower(),
             "kg_per_unit": query["kg_per_unit"],
             "unit": query["unit"],
             "self_impact": {

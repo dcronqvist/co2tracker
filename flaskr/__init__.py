@@ -7,7 +7,7 @@ CORS(app)
 
 @app.route('/', methods=["GET"])
 def hello_world():  # The method that is called when accessing the base url /
-    return make_response(jsonify("Hello World!"), 200)
+    return make_response(jsonify("Hello World! Check out the Github repo for this project to see how to use it https://github.com/dcronqvist/co2tracker"), 200)
 
 
 @app.after_request
