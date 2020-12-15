@@ -48,43 +48,46 @@ def products_create():
     query = request.get_json()
     check, msg = check_payload(product_create_sample, query)
     if check:
-        prod = {
-            "_id": query["_id"].upper(),
-            "type": "product",
-            "tags": [tag.lower() for tag in query["tags"]],
-            "type_description": query["type_description"].lower(),
-            "prod_name": query["prod_name"]
-        }
-        # All good, create product.
-
-        find = coll_products.find_one({'_id': query['_id'].upper()})
-        # If find returns the product, we do none of the below (product already exists)
-        if find is None:
-            coll_products.insert_one(prod)
-
-            benchmark = {
-                "date": dt.today().strftime("%Y-%m-%d"),
-                "product": prod["_id"],
-                "_id": prod["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
-                "kg_per_unit": query["kg_per_unit"],
-                "unit": query["unit"],
-                "self_impact": {
-                    "co2": query["benchmark"]["self_impact"]["co2"],
-                    "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
-                    "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
-                },
-                "chain_impact": {
-                    "co2": 0,
-                    "measurement_error": 0
-                },
-                "sub_products": query["benchmark"]["sub_products"],
-                "latest_benchmark": True
+        if len(query["_id"]) > 2:
+            prod = {
+                "_id": query["_id"].lower(),
+                "type": "product",
+                "tags": [tag.lower() for tag in query["tags"]],
+                "type_description": query["type_description"].lower(),
+                "prod_name": query["prod_name"]
             }
-            insert_benchmark(benchmark)
-            return make_response(jsonify(prod), 200)
-            pass
+            # All good, create product.
+
+            find = coll_products.find_one({'_id': query['_id'].lower()})
+            # If find returns the product, we do none of the below (product already exists)
+            if find is None:
+                coll_products.insert_one(prod)
+
+                benchmark = {
+                    "date": dt.today().strftime("%Y-%m-%d"),
+                    "product": prod["_id"],
+                    "_id": prod["_id"] + "-" + dt.today().strftime("%Y-%m-%d") + "-" + dt.now().strftime("%H:%M:%S"),
+                    "kg_per_unit": query["kg_per_unit"],
+                    "unit": query["unit"],
+                    "self_impact": {
+                        "co2": query["benchmark"]["self_impact"]["co2"],
+                        "measurement_error": query["benchmark"]["self_impact"]["measurement_error"],
+                        "energy_sources": [es.lower() for es in query["benchmark"]["self_impact"]["energy_sources"]]
+                    },
+                    "chain_impact": {
+                        "co2": 0,
+                        "measurement_error": 0
+                    },
+                    "sub_products": query["benchmark"]["sub_products"],
+                    "latest_benchmark": True
+                }
+                insert_benchmark(benchmark)
+                return make_response(jsonify(prod), 200)
+                pass
+            else:
+                return make_response(jsonify('ERROR: ID ' + str(query['_id']).lower() + ' already exists'), 400)
         else:
-            return make_response(jsonify('ERROR: ID ' + str(query['_id']).upper() + ' already exists'), 400)
+            return make_response(jsonify('ERROR: ID must be longer than 2 characters.'), 400)
     else:
         # Something went wrong when checking payload. Return error.
         return make_response(jsonify(msg), 400)
@@ -127,7 +130,7 @@ def products_search_by_id():
     succ, msg = check_payload(product_search_sample_id, query)
 
     if succ:
-        found = coll_products.find({'_id': {'$in': query['_id']}})  # find products with any of the id's provided
+        found = coll_products.find({'_id': {'$in': query['_id'].lower() }})  # find products with any of the id's provided
         li = (list(found))
         if len(li) == 0:  # if none found, return error
             return make_response(jsonify("No products found."), 404)
