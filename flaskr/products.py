@@ -130,7 +130,7 @@ def products_search_by_id():
     succ, msg = check_payload(product_search_sample_id, query)
 
     if succ:
-        found = coll_products.find({'_id': {'$in': query['_id'].lower() }})  # find products with any of the id's provided
+        found = coll_products.find({'_id': {'$in': [i.lower() for i in query['_id']] }})  # find products with any of the id's provided
         li = (list(found))
         if len(li) == 0:  # if none found, return error
             return make_response(jsonify("No products found."), 404)
