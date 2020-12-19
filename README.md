@@ -1,7 +1,8 @@
 # Global Supply Chain CO2 Tracker 🌱
 A four week project at Chalmers University in collaboration with Ericsson in the Course Sustainable development and ethics for computer science.
 
-![deploy to server badge](https://github.com/dcronqvist/co2tracker/workflows/Deploy%20to%20server/badge.svg)
+![Build and Test Python Application](https://github.com/dcronqvist/co2tracker/workflows/Build%20and%20Test%20Python%20Application/badge.svg)  ![deploy to server badge](https://github.com/dcronqvist/co2tracker/workflows/Deploy%20to%20server/badge.svg)
+
 
 [Front end Demo is right here](https://co2demo.dcronqvist.se/)
 
