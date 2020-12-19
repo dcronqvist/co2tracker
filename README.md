@@ -33,9 +33,8 @@ To run the server you simply run:
 ```shell
 $ python3 server.py
 ```
-## Course 
-ENM156 - Sustainable development and ethics for computer science
-https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3
+## Course page
+[ENM156 - Sustainable development and ethics for computer science](https://student.portal.chalmers.se/en/chalmersstudies/courseinformation/pages/searchcourse.aspx?course_id=28619&parsergrp=3)
 
 ## Contributors
 ![profile images of contributors](https://contributors-img.web.app/image?repo=dcronqvist/co2tracker)
